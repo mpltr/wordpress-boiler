@@ -15,15 +15,18 @@ function recursive_scandir($dir) {
     }
     return $result;
 }
+
 // Setup array for included function and class files
 $includes = [];
+
 // find function and class files and add to includes
 $functions_files = recursive_scandir(get_template_directory());
 foreach ($functions_files as $file) {
     if (strpos($file, 'fn_') !== false || strpos($file, 'cl_') !== false) {
-        array_push($myracing_includes, $file);
+        array_push($includes, $file);
     }
 }
+
 // check files and require
 foreach($includes as $file) {
     if (!$filepath = locate_template($file)) {

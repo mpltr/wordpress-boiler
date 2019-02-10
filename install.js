@@ -29,7 +29,7 @@ request('http://wordpress.org/latest.zip')
         return;
       }        
       console.log('Wordpress Extracted.');
-      const projectName = readline.question("Enter Project Name: ");
+      const projectName = slugify(readline.question("Enter Project Name: "));
       console.log('Moving Files to Project... [this can take a minute]');
       fs.moveSync(`${__dirname}/wordpress`, `${__dirname}/../${projectName}`, err => {
         if(err) return console.error(err);
@@ -38,11 +38,21 @@ request('http://wordpress.org/latest.zip')
       const themeName = readline.question("Enter Theme Name: ");
       const themeSlug = slugify(themeName);
       console.log('Building Theme Directory...');
-      fs.mkdirSync(`${__dirname}/../${projectName}/wp-content/themes/${themeSlug}`);
-      fs.copySync(`${__dirname}/theme-files`, `${__dirname}/../${projectName}/wp-content/themes/${themeName}`);
+      fs.copySync(`${__dirname}/theme-files`, `${__dirname}/../${projectName}/wp-content/themes/${themeSlug}`);
       const themeSassContent = `/* Theme Name: ${themeName} */`;
       fs.writeFile(`../${projectName}/wp-content/themes/${themeSlug}/src/sass/components/__Theme.scss`, themeSassContent, err => {
-        if(err) throw err;
+        if(err){
+          console.log('Failed to write sass Theme File');
+          console.error(err);
+          return;
+        }
+      });
+      fs.writeFile(`../${projectName}/wp-content/themes/${themeSlug}/style.css`, themeSassContent, err => {
+        if (err) {
+          console.log('Failed to write style.css');
+          console.error(err);
+          return;
+        }
       });
       console.log('Theme Directory Built.');
       console.log('Enjoy!');
