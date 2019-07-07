@@ -40,7 +40,7 @@ request('http://wordpress.org/latest.zip')
       console.log('Building Theme Directory...');
       fs.copySync(`${__dirname}/theme-files`, `${__dirname}/../${projectName}/wp-content/themes/${themeSlug}`);
       const themeSassContent = `/* Theme Name: ${themeName} */`;
-      fs.writeFile(`../${projectName}/wp-content/themes/${themeSlug}/src/sass/components/__Theme.scss`, themeSassContent, err => {
+      fs.writeFile(`../${projectName}/wp-content/themes/${themeSlug}/src/scss/components/__Theme.scss`, themeSassContent, err => {
         if(err){
           console.log('Failed to write sass Theme File');
           console.error(err);
